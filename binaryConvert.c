@@ -2,11 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define BIT_8 8
-#define BIT_16 16
-#define BIT_32 32
-#define BIT_64 64
-
 unsigned int* binarySum(unsigned int b1[], unsigned int b2[], int bits);
 unsigned int* getBinaryComplement(unsigned int b1[], int bits);
 void printBinary(unsigned int b[], int bits);
@@ -23,7 +18,7 @@ int main(int argc, char *argv[]){
 
             bits = atoi(argv[2]);
 
-            if(bits == BIT_8 || bits == BIT_16 || bits == BIT_32 || bits == BIT_64){
+            if(bits == 8 || bits == 16 || bits == 32 || bits == 64){
 
                 r = intBinarySignConvert(n, bits);
 
@@ -35,7 +30,7 @@ int main(int argc, char *argv[]){
 
         }else{
 
-            r = intBinarySignConvert(n, BIT_16);
+            r = intBinarySignConvert(n, 16);
 
         }
         
@@ -51,6 +46,8 @@ int main(int argc, char *argv[]){
 
         printErr(argv[0]);
 
+        return 0;
+
     }
 
 }
@@ -58,12 +55,12 @@ int main(int argc, char *argv[]){
 unsigned int* binarySum(unsigned int b1[], unsigned int b2[], int bits){
 
     unsigned int *result;
-    int s;
+    int s, i;
     result = (unsigned int*) malloc(sizeof(unsigned int)*bits);
     
     if(result == NULL) exit(EXIT_FAILURE);
 
-    for(int i = bits - 1; i >= 0; i--){
+    for(i = bits - 1; i >= 0; i--){
 
         s = b1[i] + b2[i];
 
@@ -94,10 +91,12 @@ unsigned int* binarySum(unsigned int b1[], unsigned int b2[], int bits){
 unsigned int* getBinaryComplement(unsigned int b1[], int bits){
 
     unsigned int *complement;
+    int i;
+
     complement = (unsigned int*) malloc(sizeof(unsigned int)*bits);
     if(complement == NULL) exit(EXIT_FAILURE);
 
-    for(int i = 0; i < bits; i++){
+    for(i = 0; i < bits; i++){
 
         complement[i] = (b1[i] == 0) ? 1 : 0;
 
@@ -109,8 +108,8 @@ unsigned int* getBinaryComplement(unsigned int b1[], int bits){
 
 void printBinary(unsigned int b[], int bits){
 
-    int a = 1;
-    for(int j = 0; j < bits; j++){
+    int a = 1, j;
+    for(j = 0; j < bits; j++){
 
         printf("%d", b[j]);
 
@@ -131,7 +130,7 @@ int intBinarySignConvert(int num, int bits){
     double range = pow(2, bits);
     double nRange = range/2;
     double pRange = nRange-1;
-    int r, d;
+    int r, d, j;
     unsigned int *v, *converted, *complement, *negative, i, a;
     unsigned int binaryOne[bits];
 
@@ -139,9 +138,9 @@ int intBinarySignConvert(int num, int bits){
 
         if(num <= pRange){
 
-            v = (int *) malloc(sizeof(int));
+            v = (unsigned int*) malloc(sizeof(unsigned int));
             if(v == NULL) exit(EXIT_FAILURE);
-            converted = (int *) malloc(sizeof(int)*bits);
+            converted = (unsigned int*) malloc(sizeof(unsigned int)*bits);
             if(converted == NULL) exit(EXIT_FAILURE);
             i = 0;
             d = num;
@@ -159,13 +158,13 @@ int intBinarySignConvert(int num, int bits){
 
             v[i] = d;
 
-            for(int j = 0; j < bits; j++){
+            for(j = 0; j < bits; j++){
 
                 converted[j] = 0;
 
             }
             a = i;
-            for(int j = bits-(i+1); j < bits; j++){
+            for(j = bits-(i+1); j < bits; j++){
 
                 converted[j] = v[a--];
 
@@ -204,13 +203,13 @@ int intBinarySignConvert(int num, int bits){
             }
 
             v[i] = d;
-            for(int j = 0; j < bits; j++){
+            for(j = 0; j < bits; j++){
                 
                 converted[j] = 0;
 
             }
             a = i;
-            for(int j = bits-(i+1); j < bits; j++){
+            for(j = bits-(i+1); j < bits; j++){
 
                 converted[j] = v[a--];
 
@@ -219,7 +218,7 @@ int intBinarySignConvert(int num, int bits){
             //calcular complemento
             complement = getBinaryComplement(converted, bits);
 
-            for(int j = 0; j < bits; j++){
+            for(j = 0; j < bits; j++){
 
                 binaryOne[j] = (j == bits-1) ? 1 : 0;
 
@@ -236,7 +235,6 @@ int intBinarySignConvert(int num, int bits){
     free(v);
     free(converted);
     free(complement);
-
 }
 
 void printErr(char *programa){
